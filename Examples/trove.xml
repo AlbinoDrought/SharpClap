@@ -18,7 +18,7 @@
       <scanShort>LBUTTON</scanShort>
     </anyType>
   </ActiveObjects>
-  <Cooldown>1000</Cooldown>
+  <Cooldown>5000</Cooldown>
   <MinCutoff>16</MinCutoff>
   <MaxCutoff>100</MaxCutoff>
 </Settings>
