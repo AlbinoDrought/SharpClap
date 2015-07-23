@@ -53,6 +53,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="VolumeMonitor">
+      <HintPath>.\VolumeMonitor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Command.cs" />
@@ -109,6 +112,9 @@
     <Content Include="NAudio.dll" />
     <Content Include="NAudio.WindowsMediaFormat.dll" />
     <Content Include="raw.ico" />
+    <Content Include="VolumeMonitor.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

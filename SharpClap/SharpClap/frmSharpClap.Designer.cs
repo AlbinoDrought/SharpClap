@@ -40,12 +40,16 @@
             this.nudMaxCutoff = new System.Windows.Forms.NumericUpDown();
             this.cbAudioOutput = new System.Windows.Forms.ComboBox();
             this.gbActions = new System.Windows.Forms.GroupBox();
+            this.btnRandomDelay = new System.Windows.Forms.Button();
             this.btnDelay5 = new System.Windows.Forms.Button();
             this.btnDelay = new System.Windows.Forms.Button();
             this.btnSubtract = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.lstPossibleActions = new System.Windows.Forms.ListBox();
             this.lstActions = new System.Windows.Forms.ListBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.nudCooldown = new System.Windows.Forms.NumericUpDown();
             this.gbVolume = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -58,24 +62,20 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.btnRandomDelay = new System.Windows.Forms.Button();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.volumeMonitor = new VolumeMonitor.VolumeMonitor();
             ((System.ComponentModel.ISupportInitialize)(this.nudCutoff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxCutoff)).BeginInit();
             this.gbActions.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCooldown)).BeginInit();
             this.gbVolume.SuspendLayout();
             this.gbControl.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // tmrVolume
             // 
             this.tmrVolume.Interval = 10;
-            this.tmrVolume.Tick += new System.EventHandler(this.tmrVolume_Tick);
             // 
             // lblVolume
             // 
@@ -104,6 +104,7 @@
             0,
             0,
             0});
+            this.nudCutoff.ValueChanged += new System.EventHandler(this.nudCutoff_ValueChanged);
             // 
             // chkEnabled
             // 
@@ -146,6 +147,7 @@
             0,
             0,
             0});
+            this.nudMaxCutoff.ValueChanged += new System.EventHandler(this.nudMaxCutoff_ValueChanged);
             // 
             // cbAudioOutput
             // 
@@ -175,6 +177,17 @@
             this.gbActions.TabIndex = 9;
             this.gbActions.TabStop = false;
             this.gbActions.Text = "Actions";
+            // 
+            // btnRandomDelay
+            // 
+            this.btnRandomDelay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRandomDelay.Location = new System.Drawing.Point(144, 98);
+            this.btnRandomDelay.Name = "btnRandomDelay";
+            this.btnRandomDelay.Size = new System.Drawing.Size(31, 23);
+            this.btnRandomDelay.TabIndex = 6;
+            this.btnRandomDelay.Text = "#s";
+            this.btnRandomDelay.UseVisualStyleBackColor = true;
+            this.btnRandomDelay.Click += new System.EventHandler(this.btnRandomDelay_Click);
             // 
             // btnDelay5
             // 
@@ -246,6 +259,28 @@
             this.lstActions.TabIndex = 0;
             this.lstActions.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lstActions_KeyUp);
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemEdit,
+            this.toolStripMenuItemDelete});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(108, 48);
+            // 
+            // toolStripMenuItemEdit
+            // 
+            this.toolStripMenuItemEdit.Name = "toolStripMenuItemEdit";
+            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(107, 22);
+            this.toolStripMenuItemEdit.Text = "Edit";
+            this.toolStripMenuItemEdit.Click += new System.EventHandler(this.toolStripMenuItemEdit_Click);
+            // 
+            // toolStripMenuItemDelete
+            // 
+            this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
+            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(107, 22);
+            this.toolStripMenuItemDelete.Text = "Delete";
+            this.toolStripMenuItemDelete.Click += new System.EventHandler(this.toolStripMenuItemDelete_Click);
+            // 
             // nudCooldown
             // 
             this.nudCooldown.Location = new System.Drawing.Point(9, 55);
@@ -262,6 +297,7 @@
             0,
             0,
             0});
+            this.nudCooldown.ValueChanged += new System.EventHandler(this.nudCooldown_ValueChanged);
             // 
             // gbVolume
             // 
@@ -361,38 +397,15 @@
             // 
             this.openFileDialog.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
             // 
-            // btnRandomDelay
+            // volumeMonitor
             // 
-            this.btnRandomDelay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRandomDelay.Location = new System.Drawing.Point(144, 98);
-            this.btnRandomDelay.Name = "btnRandomDelay";
-            this.btnRandomDelay.Size = new System.Drawing.Size(31, 23);
-            this.btnRandomDelay.TabIndex = 6;
-            this.btnRandomDelay.Text = "#s";
-            this.btnRandomDelay.UseVisualStyleBackColor = true;
-            this.btnRandomDelay.Click += new System.EventHandler(this.btnRandomDelay_Click);
-            // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemEdit,
-            this.toolStripMenuItemDelete});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
-            // 
-            // toolStripMenuItemEdit
-            // 
-            this.toolStripMenuItemEdit.Name = "toolStripMenuItemEdit";
-            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItemEdit.Text = "Edit";
-            this.toolStripMenuItemEdit.Click += new System.EventHandler(this.toolStripMenuItemEdit_Click);
-            // 
-            // toolStripMenuItemDelete
-            // 
-            this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
-            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItemDelete.Text = "Delete";
-            this.toolStripMenuItemDelete.Click += new System.EventHandler(this.toolStripMenuItemDelete_Click);
+            this.volumeMonitor.Cooldown = 500;
+            this.volumeMonitor.CooldownEnabled = true;
+            this.volumeMonitor.ThresholdMaximum = 100;
+            this.volumeMonitor.ThresholdMinimum = 50;
+            this.volumeMonitor.UpdateInterval = 10;
+            this.volumeMonitor.OnTick += new VolumeMonitor.VolumeMonitor.UpdateDelegate(this.volumeMonitor_OnTick);
+            this.volumeMonitor.OnThresholdHit += new VolumeMonitor.VolumeMonitor.UpdateDelegate(this.volumeMonitor_OnThresholdHit);
             // 
             // frmSharpClap
             // 
@@ -415,6 +428,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudCutoff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxCutoff)).EndInit();
             this.gbActions.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudCooldown)).EndInit();
             this.gbVolume.ResumeLayout(false);
             this.gbVolume.PerformLayout();
@@ -422,7 +436,6 @@
             this.gbControl.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -462,6 +475,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEdit;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDelete;
+        private VolumeMonitor.VolumeMonitor volumeMonitor;
     }
 }
 

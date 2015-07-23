@@ -13,16 +13,6 @@ namespace SharpClap
 
     public partial class frmSharpClap : Form
     {
-        private MMDevice currentDevice;
-
-        private WasapiCapture currentCapture;
-
-        private int amountPeakValues = 4;
-
-        private List<int> peakValues;
-
-        private int actionCooldown = 0;
-
         private Random random = new Random();
 
         private bool currentlyProcessing = false;
@@ -152,46 +142,28 @@ namespace SharpClap
         }
         #endregion
 
-        #region Other Listeners
-        private void tmrVolume_Tick(object sender, EventArgs e)
+        #region NUD-Listeners
+        private void nudCutoff_ValueChanged(object sender, EventArgs e)
         {
-            int value = 0;
-
-            if (currentDevice != null)
-            {
-                value = (int)(Math.Round(currentDevice.AudioMeterInformation.MasterPeakValue * 100));
-            }
-
-            peakValues.RemoveAt(0);
-            peakValues.Add(value);
-
-            int average = 0;
-
-            for (int i = 0; i < peakValues.Count; i++)
-            {
-                average += peakValues[i];
-            }
-
-            average /= peakValues.Count;
-            bool averageInCutoff = average >= nudCutoff.Value && average <= nudMaxCutoff.Value;
-
-            if (averageInCutoff && !currentlyProcessing)
-            {
-                this.aboveCutoff();
-            }
-
-            this.SetAverage(average, averageInCutoff);
-
-            if (!currentlyProcessing && actionCooldown > 0)
-            {
-                this.SetCooldown(actionCooldown - 1);
-            }
+            volumeMonitor.ThresholdMinimum = (int)nudCutoff.Value;
         }
+
+        private void nudMaxCutoff_ValueChanged(object sender, EventArgs e)
+        {
+            volumeMonitor.ThresholdMaximum = (int)nudMaxCutoff.Value;
+        }
+
+        private void nudCooldown_ValueChanged(object sender, EventArgs e)
+        {
+            volumeMonitor.Cooldown = (int)nudCooldown.Value;
+        }
+        #endregion
+
+        #region Other Listeners
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-            foreach (MMDevice device in enumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active))
+            foreach (MMDevice device in volumeMonitor.GetDevices())
             {
                 cbAudioOutput.Items.Add(device);
             }
@@ -209,7 +181,7 @@ namespace SharpClap
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.StopRecording();
+            volumeMonitor.RemoveAll();
         }
 
         private void chkEnabled_CheckedChanged(object sender, EventArgs e)
@@ -228,31 +200,27 @@ namespace SharpClap
         private void cbAudioOutput_SelectedIndexChanged(object sender, EventArgs e)
         {
             MMDevice mmd = (MMDevice)cbAudioOutput.SelectedItem;
-            currentDevice = mmd;
-
-            this.StopRecording();
-
-            if (mmd.DataFlow == DataFlow.Capture)
-            {
-                // if the device is a mic, sound will only be recorded if something is listening
-                currentCapture = new WasapiCapture(currentDevice);
-                currentCapture.StartRecording();
-            }
-
-            peakValues = new List<int>();
-
-            for (int i = 0; i < amountPeakValues; i++)
-            {
-                peakValues.Add(0);
-            }
+            
+            volumeMonitor.RemoveAll();
+            volumeMonitor.Add(mmd);
 
             tmrVolume.Enabled = true;
+        }
+
+        private void volumeMonitor_OnThresholdHit(MMDevice device, int volume)
+        {
+            this.aboveCutoff();
+        }
+
+        private void volumeMonitor_OnTick(MMDevice device, int volume)
+        {
+            this.SetAverage(volume, volumeMonitor.ValueInThreshold(volume));
+            this.SetCooldown(volumeMonitor.CurrentCooldown);
         }
         #endregion
 
         private void SetCooldown(int newcooldown)
         {
-            actionCooldown = newcooldown;
             string formattedCooldown = newcooldown.ToString("0000");
 
             lblCooldown.Text = String.Format("Current Cooldown: {0}", formattedCooldown);
@@ -274,16 +242,6 @@ namespace SharpClap
             }
         }
 
-        private void StopRecording(bool dispose = true)
-        {
-            if (currentCapture != null)
-            {
-                currentCapture.StopRecording();
-                if(dispose) currentCapture.Dispose();
-                currentCapture = null;
-            }
-        }
-
         private void deleteSelectedActions()
         {
             if (lstActions.SelectedItems.Count <= 0) return;
@@ -299,7 +257,7 @@ namespace SharpClap
 
         private async void aboveCutoff()
         {
-            if (!chkEnabled.Checked || actionCooldown > 0 || currentlyProcessing) return;
+            if (!chkEnabled.Checked || currentlyProcessing) return;
 
             // uses async/await to not lock the UI thread
             currentlyProcessing = true;
