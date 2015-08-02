@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SharpClap.Commands
 {
     public class PressKey : Command
     {
-        public Extern.VirtualKeyShort keyShort;
+        public Extern.VirtualKeyShort[] keyShort;
 
-        public Extern.ScanCodeShort scanShort;
+        public Extern.ScanCodeShort[] scanShort;
 
         private static Random random = new Random();
 
@@ -21,76 +22,96 @@ namespace SharpClap.Commands
             
         }
 
-        public PressKey(Extern.VirtualKeyShort key)
+        public PressKey(Extern.VirtualKeyShort[] keys)
         {
-            keyShort = key;
-            this.GuessScanCode(key);
+            keyShort = keys;
+            scanShort = GuessScanCodes(keys);
         }
 
-        public PressKey(Extern.VirtualKeyShort key, Extern.ScanCodeShort scan)
+        public PressKey(Extern.VirtualKeyShort[] keys, Extern.ScanCodeShort[] scans)
         {
-            keyShort = key;
-            scanShort = scan;
+            keyShort = keys;
+            scanShort = scans;
         }
 
-        public void GuessScanCode(Extern.VirtualKeyShort key)
+        public Extern.ScanCodeShort[] GuessScanCodes(Extern.VirtualKeyShort[] keys)
+        {
+            List<Extern.ScanCodeShort> scanCodes = new List<Extern.ScanCodeShort>();
+
+            foreach(Extern.VirtualKeyShort key in keys)
+            {
+                scanCodes.Add(GuessScanCode(key));
+            }
+
+            return scanCodes.ToArray();
+        }
+
+        public Extern.ScanCodeShort GuessScanCode(Extern.VirtualKeyShort key)
         {
             Extern.ScanCodeShort guessScanCodeShort;
             Extern.ScanCodeShort.TryParse(key.ToString(), true, out guessScanCodeShort);
 
-            if (guessScanCodeShort != 0)
-            {
-                scanShort = guessScanCodeShort;
-            }
+            return guessScanCodeShort;
         }
 
         public async override Task<string> Execute()
         {
-            // tabs get kinda wacky here
-            await Task.Run(
-                () =>
-                    {
-                        Extern.INPUT[] sendInputs = new Extern.INPUT[]
-                                                        {
-                                                            new SharpClap.Extern.INPUT()
-                                                                {
-                                                                    type = Extern.INPUT_KEYBOARD,
-                                                                    U =
-                                                                        new Extern.InputUnion()
-                                                                            {
-                                                                                ki
-                                                                                    =
-                                                                                    new Extern
-                                                                                    .
-                                                                                    KEYBDINPUT
-                                                                                    (
-                                                                                    )
-                                                                                        {
-                                                                                            wScan
-                                                                                                =
-                                                                                                scanShort,
-                                                                                            wVk
-                                                                                                =
-                                                                                                keyShort
-                                                                                        }
-                                                                            }
-                                                                }
-                                                        };
-
-                        Extern.SendInput(sendInputs);
-
-                        System.Threading.Thread.Sleep(random.Next(pressReleaseIntervalMin, pressReleaseIntervalMax));
-
-                        sendInputs[0].U.ki.dwFlags = Extern.KEYEVENTF.KEYUP;
-                        Extern.SendInput(sendInputs);
-                    });
+            await Task.Run((Action)SendKeys);
             
-            return "Finished sending key";
+            return "Finished sending keys";
+        }
+
+        private void SendKeys()
+        {
+            Extern.INPUT[] sendInputs = new Extern.INPUT[keyShort.Length];
+            for(int i = 0; i < sendInputs.Length; i++)
+            {
+                sendInputs[i] = GetKeyEvent(keyShort[i], scanShort[i]);
+            }
+
+            Extern.SendInput(sendInputs);
+
+            System.Threading.Thread.Sleep(random.Next(pressReleaseIntervalMin, pressReleaseIntervalMax));
+
+            // set key up event
+            for(int i = 0; i < sendInputs.Length; i++)
+            {
+                sendInputs[i].U.ki.dwFlags = Extern.KEYEVENTF.KEYUP;
+            }
+
+            Extern.SendInput(sendInputs);
+        }
+
+        private Extern.INPUT GetKeyEvent(Extern.VirtualKeyShort key, Extern.ScanCodeShort scan)
+        {
+            return new SharpClap.Extern.INPUT()
+                                        {
+                                            type = Extern.INPUT_KEYBOARD,
+                                            U =
+                                                new Extern.InputUnion()
+                                                    {
+                                                        ki
+                                                            =
+                                                            new Extern
+                                                            .
+                                                            KEYBDINPUT
+                                                            (
+                                                            )
+                                                                {
+                                                                    wScan
+                                                                        =
+                                                                        scan,
+                                                                    wVk
+                                                                        =
+                                                                        key
+                                                                }
+                                                    }
+                                        };
         }
 
         public override string ToString()
         {
-            return keyShort.ToString();
+            return String.Join(", ", keyShort);
         }
     }
 }

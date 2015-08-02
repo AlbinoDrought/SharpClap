@@ -30,10 +30,13 @@ namespace SharpClap
             foreach (DialogQuestion dq in questions)
             {
                 // mmm... dq....
+
+                Size labelSize = TextRenderer.MeasureText(dq.Message, SystemFonts.DefaultFont);
                 Label questionLabel = new Label()
                                           {
                                               Text = dq.Message,
-                                              Location = new Point(OffsetX, positionY)
+                                              Location = new Point(OffsetX, positionY),
+                                              Size = labelSize
                                           };
                 positionY += questionLabel.Size.Height;
                 this.Controls.Add(questionLabel);

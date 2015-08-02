@@ -112,6 +112,12 @@
     <Content Include="NAudio.dll" />
     <Content Include="NAudio.WindowsMediaFormat.dll" />
     <Content Include="raw.ico" />
+    <Content Include="Samples\loudnoises.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\trove.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="VolumeMonitor.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

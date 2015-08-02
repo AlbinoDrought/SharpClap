@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ActiveObjects>
+    <anyType xsi:type="Delay">
+      <Value>0.3</Value>
+      <ValueModifier>0.7</ValueModifier>
+    </anyType>
+    <anyType xsi:type="PressKey">
+      <keyShort>
+        <VirtualKeyShort>KEY_F</VirtualKeyShort>
+      </keyShort>
+      <scanShort>
+        <ScanCodeShort>LBUTTON</ScanCodeShort>
+      </scanShort>
+    </anyType>
+    <anyType xsi:type="Delay">
+      <Value>2</Value>
+      <ValueModifier>2</ValueModifier>
+    </anyType>
+    <anyType xsi:type="PressKey">
+      <keyShort>
+        <VirtualKeyShort>KEY_F</VirtualKeyShort>
+      </keyShort>
+      <scanShort>
+        <ScanCodeShort>LBUTTON</ScanCodeShort>
+      </scanShort>
+    </anyType>
+  </ActiveObjects>
+  <Cooldown>1000</Cooldown>
+  <MinCutoff>16</MinCutoff>
+  <MaxCutoff>100</MaxCutoff>
+</Settings>

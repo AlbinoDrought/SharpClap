@@ -17,10 +17,11 @@ I wanted to rank up my fishing in the game Trove, but I did not have the audacit
 
 ## Examples
 
-See the folder called "Examples" for example xml files you can load through the program.
+See the folder inside the SharpClap solution called "Samples" for example xml files you can load through the program.
 
 Currently contains:
 * **trove.xml** - Sound-based auto-fisher for the F2P Trove MMO
+* **loudnoises.xml** - Presses a key-combination (ALT-M) when a max-volume noise is heard, waits 3 seconds, and presses it again. Main purpose is to mute my microphone on Skype when the dogs bark.
 
 ## License
 

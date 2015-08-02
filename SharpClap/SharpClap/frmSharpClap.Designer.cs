@@ -250,10 +250,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lstActions.ContextMenuStrip = this.contextMenuStrip;
             this.lstActions.FormattingEnabled = true;
+            this.lstActions.HorizontalScrollbar = true;
             this.lstActions.Location = new System.Drawing.Point(181, 19);
             this.lstActions.MaximumSize = new System.Drawing.Size(200, 500);
             this.lstActions.Name = "lstActions";
-            this.lstActions.ScrollAlwaysVisible = true;
             this.lstActions.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstActions.Size = new System.Drawing.Size(132, 160);
             this.lstActions.TabIndex = 0;

@@ -33,15 +33,15 @@ namespace SharpClap
         {
             if (lstPossibleActions.SelectedItems.Count <= 0) return;
 
-            List<PressKey> keyCommands = new List<PressKey>();
-
+            List<Extern.VirtualKeyShort> vks = new List<Extern.VirtualKeyShort>();
             foreach (object o in lstPossibleActions.SelectedItems)
             {
-                Extern.VirtualKeyShort vks = (Extern.VirtualKeyShort)o;
-                keyCommands.Add(new PressKey(vks));
+                vks.Add((Extern.VirtualKeyShort)o);
             }
 
-            lstActions.Items.AddRange(keyCommands.ToArray());
+            PressKey keyCommand = new PressKey(vks.ToArray());
+
+            lstActions.Items.Add(keyCommand);
         }
 
         private void btnSubtract_Click(object sender, EventArgs e)
@@ -129,6 +129,7 @@ namespace SharpClap
                 if (!typeof(Command).IsAssignableFrom(oType)) continue;
 
                 Command c = (Command)o;
+                //dynamic dynamicCommand = Convert.ChangeType(o, oType);
                 c = gid.Edit(c);
 
                 int realCommandIndex = lstActions.Items.IndexOf(lstActions.SelectedItems[i]);
