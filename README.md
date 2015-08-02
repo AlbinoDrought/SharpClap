@@ -11,7 +11,7 @@ I wanted to rank up my fishing in the game Trove, but I did not have the audacit
 * Ability to listen to both input and output devices
 * Minimum and maximum noise thresholds
 * User-defined keys
-* Support for static and random delays
+* Support for static and random delays between presses
 * Saving and loading settings to .xml
 * Customizable cooldown inbetween detection instances
 
