@@ -8,7 +8,7 @@
       </keyShort>
       <scanShort>
         <ScanCodeShort>MENU</ScanCodeShort>
-        <ScanCodeShort>LBUTTON</ScanCodeShort>
+        <ScanCodeShort>KEY_M</ScanCodeShort>
       </scanShort>
     </anyType>
     <anyType xsi:type="Delay">
@@ -22,7 +22,7 @@
       </keyShort>
       <scanShort>
         <ScanCodeShort>MENU</ScanCodeShort>
-        <ScanCodeShort>LBUTTON</ScanCodeShort>
+        <ScanCodeShort>KEY_M</ScanCodeShort>
       </scanShort>
     </anyType>
   </ActiveObjects>

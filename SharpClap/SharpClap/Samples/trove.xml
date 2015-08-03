@@ -10,7 +10,7 @@
         <VirtualKeyShort>KEY_F</VirtualKeyShort>
       </keyShort>
       <scanShort>
-        <ScanCodeShort>LBUTTON</ScanCodeShort>
+        <ScanCodeShort>KEY_F</ScanCodeShort>
       </scanShort>
     </anyType>
     <anyType xsi:type="Delay">
@@ -22,11 +22,11 @@
         <VirtualKeyShort>KEY_F</VirtualKeyShort>
       </keyShort>
       <scanShort>
-        <ScanCodeShort>LBUTTON</ScanCodeShort>
+        <ScanCodeShort>KEY_F</ScanCodeShort>
       </scanShort>
     </anyType>
   </ActiveObjects>
-  <Cooldown>1000</Cooldown>
+  <Cooldown>6000</Cooldown>
   <MinCutoff>16</MinCutoff>
   <MaxCutoff>100</MaxCutoff>
 </Settings>
