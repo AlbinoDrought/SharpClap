@@ -76,6 +76,7 @@
             // tmrVolume
             // 
             this.tmrVolume.Interval = 10;
+            this.tmrVolume.Tick += new System.EventHandler(this.tmrVolume_Tick);
             // 
             // lblVolume
             // 

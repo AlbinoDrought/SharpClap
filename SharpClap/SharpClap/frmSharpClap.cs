@@ -261,20 +261,26 @@ namespace SharpClap
             if (!chkEnabled.Checked || currentlyProcessing) return;
 
             // uses async/await to not lock the UI thread
-            currentlyProcessing = true;
             this.SetCooldown((int)nudCooldown.Value);
             await this.sendKey();
-            currentlyProcessing = false;
+            //currentlyProcessing = false;
         }
 
         private async Task<string> sendKey()
         {
+            currentlyProcessing = true;
             foreach (object o in lstActions.Items)
             {
                 await ((Command)o).Execute();
             }
+            currentlyProcessing = false;
 
             return String.Format("Executed {0} commands", lstActions.Items.Count);
+        }
+
+        private void tmrVolume_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 }
